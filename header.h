@@ -2315,7 +2315,7 @@ extern int  parse_given_directive(int internal_flag);
 #define FORERRORS_SIZE (512)
 extern char *forerrors_buff;
 extern int  forerrors_pointer;
-extern int  no_errors, no_warnings, no_suppressed_warnings, no_compiler_errors;
+extern int  no_errors, no_warnings, no_infos, no_suppressed_warnings, no_compiler_errors;
 
 extern ErrorPosition ErrorReport;
 
@@ -2344,6 +2344,11 @@ extern void symtype_warning(char *context, char *name, char *type, char *wanttyp
 extern void dbnu_warning(char *type, char *name, brief_location report_line);
 extern void uncalled_routine_warning(char *type, char *name, brief_location report_line);
 extern void obsolete_warning(char *s1);
+
+extern void info(char *s);
+extern void info_fmt(const char *format, ...);
+extern void info_named(char *s1, char *s2);
+extern void info_at(char *name, brief_location report_line);
 
 extern int  compiler_error(char *s);
 extern int  compiler_error_named(char *s1, char *s2);

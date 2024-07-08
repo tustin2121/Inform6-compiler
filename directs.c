@@ -1116,7 +1116,7 @@ Fake_Action directives to a point after the inclusion of \"Parser\".)");
                that overrides this. */
             if (version_set_switch)
             {
-              warning("The Version directive was overridden by a command-line argument.");
+              info("The Version directive was overridden by a command-line argument.");
               break;
             }
 

@@ -562,7 +562,7 @@ extern void issue_debug_symbol_warnings(void)
     if (value >= 0 && (symbols[value].flags & USED_SFLAG) && !(symbols[value].flags & UNKNOWN_SFLAG)) {
         value = get_symbol_index("debug_flag");
         if (value >= 0 && (symbols[value].flags & USED_SFLAG) && (symbols[value].flags & UNKNOWN_SFLAG)) {
-            warning("DEBUG mode is on, but this story or library does not appear to support it");
+            info("DEBUG mode is on, but this story or library does not appear to support it");
         }
     }
 }
