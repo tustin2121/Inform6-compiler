@@ -1126,7 +1126,7 @@ it is too late to change the grammar version.");
                that overrides this. */
             if (version_set_switch)
             {
-              warning("The Version directive was overridden by a command-line argument.");
+              info("The Version directive was overridden by a command-line argument.");
               break;
             }
 

@@ -231,12 +231,12 @@ extern void fatalerror_memory_out(int32 size, int32 howmany, char *name)
 /*   Survivable diagnostics:                                                 */
 /*      compilation errors   style 1                                         */
 /*      warnings             style 2                                         */
-/*      linkage errors       style 3 (no longer used)                        */
+/*      info                 style 3                                         */
 /*      compiler errors      style 4 (these should never happen and          */
 /*                                    indicate a bug in Inform)              */
 /* ------------------------------------------------------------------------- */
 
-int no_errors, no_warnings, no_suppressed_warnings, no_compiler_errors;
+int no_errors, no_warnings, no_infos, no_suppressed_warnings, no_compiler_errors;
 
 char *forerrors_buff;
 int  forerrors_pointer;
@@ -249,7 +249,7 @@ static void message(int style, char *s)
     switch(style)
     {   case 1: printf("Error: "); no_errors++; break;
         case 2: printf("Warning: "); no_warnings++; break;
-        case 3: printf("Error:  [linking]  "); no_errors++; break;
+        case 3: printf("Info: "); no_infos++; break;
         case 4: printf("*** Compiler error: ");
                 no_compiler_errors++; break;
     }
@@ -520,6 +520,44 @@ extern void obsolete_warning(char *s1)
 }
 
 /* ------------------------------------------------------------------------- */
+/*   Style 3: Info message routines                                          */
+/* ------------------------------------------------------------------------- */
+
+extern void info(char *s1)
+{
+    message(3,s1);
+}
+
+extern void info_fmt(const char *format, ...)
+{
+    va_list argument_pointer;
+    va_start(argument_pointer, format);
+    vsnprintf(error_message_buff, ERROR_BUFLEN, format, argument_pointer);
+    va_end(argument_pointer);
+    ellipsize_error_message_buff();
+    message(3,error_message_buff);
+}
+
+extern void info_named(char *s1, char *s2)
+{
+    snprintf(error_message_buff, ERROR_BUFLEN,"%s \"%s\"", s1, s2);
+    ellipsize_error_message_buff();
+    message(3,error_message_buff);
+}
+
+extern void info_at(char *name, brief_location report_line)
+{   int i;
+    ErrorPosition E = ErrorReport;
+    export_brief_location(report_line, &ErrorReport);
+    snprintf(error_message_buff, ERROR_BUFLEN, "%s", name);
+    ellipsize_error_message_buff();
+    i = concise_switch; concise_switch = TRUE;
+    message(3,error_message_buff);
+    concise_switch = i;
+    ErrorReport = E;
+}
+
+/* ------------------------------------------------------------------------- */
 /*   Style 4: Compiler error message routines                                */
 /* ------------------------------------------------------------------------- */
 
@@ -610,7 +648,7 @@ extern void throwback(int severity, char * error)
 
 extern void init_errors_vars(void)
 {   forerrors_buff = NULL;
-    no_errors = 0; no_warnings = 0; no_suppressed_warnings = 0;
+    no_errors = 0; no_warnings = 0; no_infos = 0; no_suppressed_warnings = 0;
     no_compiler_errors = 0;
 }
 

@@ -1088,7 +1088,7 @@ static void mark_top_of_emitter_stack(int marker, const token_data *t)
     if (emitter_stack[emitter_sp-1].marker)
     {   if (marker == ARGUMENT_VALUE_MARKER)
         {
-            warning("Ignoring spurious leading comma");
+            info("Ignoring spurious leading comma");
             return;
         }
         error_named("Missing operand for", t->text);
@@ -1201,7 +1201,7 @@ static void emit_token(const token_data *t)
             printf("\n");
         }
         if (emitter_stack[emitter_sp-1].marker == ARGUMENT_VALUE_MARKER)
-            warning("Ignoring spurious trailing comma");
+            info("Ignoring spurious trailing comma");
         while (emitter_stack[emitter_sp-arity].marker != FUNCTION_VALUE_MARKER)
         {
             if ((glulx_mode &&
