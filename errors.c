@@ -485,7 +485,7 @@ extern void dbnu_warning(char *type, char *name, brief_location report_line)
     snprintf(error_message_buff, ERROR_BUFLEN, "%s \"%s\" declared but not used", type, name);
     ellipsize_error_message_buff();
     i = concise_switch; concise_switch = TRUE;
-    message(2,error_message_buff);
+    message((WARN_UNUSED_SYMBOLS?2:3),error_message_buff);
     concise_switch = i;
     ErrorReport = E;
 }
