@@ -171,6 +171,18 @@ extern int strcmpcis(char *p, char *q)
     return -qc;
 }
 
+extern int strcmp_sym(char *p, char *q)
+{
+    /*  A redirect to case sensitive or insensitive strcmp, depending on
+        if symbol case is enforced or not.  */
+    
+    if (STRICT_SYMBOL_CASE) {
+        return strcmp(p, q);
+    } else {
+        return strcmpcis(p, q);
+    }
+}
+
 /* ------------------------------------------------------------------------- */
 
 extern void add_config_symbol_definition(char *symbol, int32 value)
@@ -214,7 +226,7 @@ extern int get_symbol_index(char *p)
     {   if (this == -1) break;
 
         r = symbols[this].name;
-        new_entry = strcmpcis(r, p);
+        new_entry = strcmp_sym(r, p);
         if (new_entry == 0) 
         {
             return this;
@@ -255,7 +267,7 @@ extern int symbol_index(char *p, int hashcode, int *created)
     {   if (this == -1) break;
 
         r = symbols[this].name;
-        new_entry = strcmpcis(r, p);
+        new_entry = strcmp_sym(r, p);
         if (new_entry == 0) 
         {
             if (track_unused_routines)

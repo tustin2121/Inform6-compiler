@@ -271,6 +271,7 @@ int32 MEMORY_MAP_EXTENSION;
 int WARN_UNUSED_ROUTINES; /* 0: no, 1: yes except in system files, 2: yes always */
 int OMIT_UNUSED_ROUTINES; /* 0: no, 1: yes */
 int WARN_UNUSED_SYMBOLS; /* 0: no, 1: yes (default) */
+int STRICT_SYMBOL_CASE; /* 0: no, 1: yes */
 int STRIP_UNREACHABLE_LABELS; /* 0: no, 1: yes (default) */
 int OMIT_SYMBOL_TABLE; /* 0: no, 1: yes */
 int DICT_IMPLICIT_SINGULAR; /* 0: no, 1: yes */
@@ -334,6 +335,7 @@ static void list_memory_sizes(void)
     printf("|  %25s = %-7d |\n","WARN_UNUSED_ROUTINES",WARN_UNUSED_ROUTINES);
     printf("|  %25s = %-7d |\n","OMIT_UNUSED_ROUTINES",OMIT_UNUSED_ROUTINES);
     printf("|  %25s = %-7d |\n","WARN_UNUSED_SYMBOLS",WARN_UNUSED_SYMBOLS);
+    printf("|  %25s = %-7d |\n","STRICT_SYMBOL_CASE",STRICT_SYMBOL_CASE);
     printf("|  %25s = %-7d |\n","STRIP_UNREACHABLE_LABELS",STRIP_UNREACHABLE_LABELS);
     printf("|  %25s = %-7d |\n","OMIT_SYMBOL_TABLE",OMIT_SYMBOL_TABLE);
     printf("|  %25s = %-7d |\n","DICT_IMPLICIT_SINGULAR",DICT_IMPLICIT_SINGULAR);
@@ -375,6 +377,7 @@ extern void set_memory_sizes(void)
     OMIT_UNUSED_ROUTINES = 0;
     WARN_UNUSED_ROUTINES = 0;
     WARN_UNUSED_SYMBOLS = 1;
+    STRICT_SYMBOL_CASE = 0;
     STRIP_UNREACHABLE_LABELS = 1;
     OMIT_SYMBOL_TABLE = 0;
     DICT_IMPLICIT_SINGULAR = 0;
@@ -549,6 +552,14 @@ static void explain_parameter(char *command)
 "  WARN_UNUSED_SYMBOLS, if set to 1, will warn about unused symbols \n\
   including routines, constants, and local variables. When set to 0, \n\
   these will instead be info-level output. The default is 1.\n");
+        return;
+    }
+    if (strcmp(command,"STRICT_SYMBOL_CASE")==0)
+    {
+        printf(
+"  STRICT_SYMBOL_CASE, if set to 1, will enforce case sensitivity for \n\
+  symbols, including Routines, Constants, Globals, and Labels. Local \n\
+  variables are unaffected. The default is 0.\n");
         return;
     }
     if (strcmp(command,"STRIP_UNREACHABLE_LABELS")==0)
@@ -1006,6 +1017,12 @@ extern void memory_command(char *command)
                 WARN_UNUSED_SYMBOLS=j, flag=1;
                 if (WARN_UNUSED_SYMBOLS > 1 || WARN_UNUSED_SYMBOLS < 0)
                     WARN_UNUSED_SYMBOLS = 1;
+            }
+            if (strcmp(command,"STRICT_SYMBOL_CASE")==0)
+            {
+                STRICT_SYMBOL_CASE=j, flag=1;
+                if (STRICT_SYMBOL_CASE > 1 || STRICT_SYMBOL_CASE < 0)
+                    STRICT_SYMBOL_CASE = 1;
             }
             if (strcmp(command,"STRIP_UNREACHABLE_LABELS")==0)
             {
